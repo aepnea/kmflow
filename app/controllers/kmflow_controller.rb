@@ -43,9 +43,28 @@ class KmflowController < ApplicationController
   end
   private
   def verificar_respuesta
+    require "rack"
+
     logger.info "Verificando respuesta #################"
     logger.info params[:response]
-    resp = Kmflow::Pagos::verificar_respuesta(params[:response])
+    #resp = Kmflow::Pagos::verificar_respuesta(params[:response])
+
+      order = Rack::Utils.parse_nested_query(params[:response])
+      logger.info order
+      logger.info "sacando la llave del hash"
+      noKey = flowParams.split('&s=').first
+      logger.info noKey
+      logger.info "verificando la llave"
+      kDecode = Base64.decode64(order['s'])
+      logger.info kDecode
+      logger.info "verificando la firma"
+      ver = public_key.verify OpenSSL::Digest::SHA1.new, kDecode, noKey
+      logger.info ver
+      log.info 'Firma pública verificada correctamente' if ver
+      { 'response' => ver, 'order' => order }
+
+
+
     logger.info "resultado de verificar_respuesta #################"
     logger.info resp
     logger.info "comienza if de verificar_respuesta #################"
