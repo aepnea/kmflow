@@ -28,19 +28,19 @@ module Kmflow
     
     def self.verificar_respuesta(flowParams)
       require "rack"
-      logger.info "metodo verificar_respuesta"
-      logger.info "procesando order = Rack::Utils.parse_nested_query(flowParams)"
+      log.info "metodo verificar_respuesta"
+      log.info "procesando order = Rack::Utils.parse_nested_query(flowParams)"
       order = Rack::Utils.parse_nested_query(flowParams)
-      logger.info order
-      logger.info "sacando la llave del hash"
+      log.info order
+      log.info "sacando la llave del hash"
       noKey = flowParams.split('&s=').first
-      logger.info noKey
-      logger.info "verificando la llave"
+      log.info noKey
+      log.info "verificando la llave"
       kDecode = Base64.decode64(order['s'])
-      logger.info kDecode
-      logger.info "verificando la firma"
+      log.info kDecode
+      log.info "verificando la firma"
       ver = public_key.verify OpenSSL::Digest::SHA1.new, kDecode, noKey
-      logger.info ver
+      log.info ver
       log.info 'Firma pública verificada correctamente' if ver
       { 'response' => ver, 'order' => order }
     end
