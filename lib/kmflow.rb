@@ -27,6 +27,7 @@ module Kmflow
     end
     
     def self.verificar_respuesta(flowParams)
+      require "rack"
       logger.info "metodo verificar_respuesta"
       logger.info "procesando order = Rack::Utils.parse_nested_query(flowParams)"
       order = Rack::Utils.parse_nested_query(flowParams)
