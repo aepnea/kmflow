@@ -25,35 +25,35 @@ module Kmflow
       <input type=\"hidden\" name=\"parameters\" value=\"#{flowHash}\"/><button type=\"submit\">#{btntxt}</button></form>"
       data[:return] == 'hash' ? flowHash : form.html_safe
     end
-    
+
     def self.verificar_respuesta(flowParams)
       require "rack"
       log.info "metodo verificar_respuesta"
       log.info "procesando order = Rack::Utils.parse_nested_query(flowParams)"
       order = Rack::Utils.parse_nested_query(flowParams)
-      log.info order
+      #log.info order
       log.info "sacando la llave del hash"
       noKey = flowParams.split('&s=').first
-      log.info noKey
+      #log.info noKey
       log.info "verificando la llave"
       kDecode = Base64.decode64(order['s'])
-      log.info kDecode
+      #log.info kDecode
       log.info "verificando la firma"
       ver = public_key.verify OpenSSL::Digest::SHA1.new, kDecode, noKey
-      log.info ver
+      #log.info ver
       log.info 'Firma pública verificada correctamente' if ver
       { 'response' => ver, 'order' => order }
     end
-    
+
     def self.loger(m)
       log.info m.to_s
     end
-    
+
     private
     def self.cfg
       YAML.load_file("#{::Rails.root.to_s}/config/kmflow.yml")[Rails.env]
     end
-    
+
     def self.build_response(result_bool)
       r = result_bool ? 'ACEPTADO' : 'RECHAZADO'
       data = ['status' => r, 'c' => cfg['email_tienda']]
@@ -62,14 +62,14 @@ module Kmflow
       sign = flow_sign(q)
       q+'&s='+sign.html_content
     end
-    
+
     def self.flow_sign(data)
       prvkey = private_key()
       enc = prvkey.sign(OpenSSL::Digest::SHA1.new, data)
       log.error 'No se pudo firmar con la llave privada' if !enc
       Base64.encode64(enc)
     end
-    
+
     def self.read_confirm(r)
       order = Rack::Utils.parse_nested_query(r)
       {'status' => order['status']}
@@ -80,18 +80,18 @@ module Kmflow
     rescue
       render text: 'FRACASO'
     end
-    
+
     def self.private_key
       OpenSSL::PKey::RSA.new File.read cfg['key_privada']
     end
-    
+
     def self.public_key
       OpenSSL::PKey::RSA.new File.read cfg['key_publica']
     end
-    
+
     def self.log
       @@log ||= Logger.new("#{Rails.root}/log/kmflow.log")
     end
-    
+
   end
 end
