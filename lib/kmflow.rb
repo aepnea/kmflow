@@ -55,11 +55,17 @@ module Kmflow
     end
 
     def self.build_response(result_bool)
+      log.info "en build_response #########################"
       r = result_bool ? 'ACEPTADO' : 'RECHAZADO'
       data = ['status' => r, 'c' => cfg['email_tienda']]
+      log.info "status y email: #{data}"
       log.info "Status: #{r}"
       q = URI.encode_www_form(data)
+      log.info "datos importantes #########################"
+      log.info q
+      log.info "firmando #########################"
       sign = flow_sign(q)
+      log.info sign
       q+'&s='+sign.html_content
     end
 
