@@ -67,7 +67,9 @@ module Kmflow
       sign = flow_sign(q)
       log.info sign
       #q+'&s='+sign.html_content
-      q+'&s='+sign
+      firma = q+'&s='+sign
+      log.info "firma realizada: #{firma}"
+      return firma
     end
 
     def self.flow_sign(data)
