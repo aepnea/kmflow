@@ -50,6 +50,10 @@ class KmflowController < ApplicationController
     logger.info "resultado de verificar_respuesta #################"
     logger.info resp
     logger.info "comienza if de verificar_respuesta #################"
+    logger.info "read_confirm ejecutandose"
+    status = Kmflow::Pagos::read_confirm(params[:response])
+    logger.info status
+    
     if resp['response']
       @flow = resp['order']
     else
