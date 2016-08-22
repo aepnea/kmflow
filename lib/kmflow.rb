@@ -74,11 +74,13 @@ module Kmflow
       log.info "en read_confirm ##################"
       order = Rack::Utils.parse_nested_query(r)
       log.info order
+      log.info order['status']
       {'status' => order['status']}
       log.error 'invalid response status' if !order
       log.error 'Mensaje no tiene firma' if !order['s']
       log.error 'Firma invalida' if !verificar_respuesta(r)
       log.error 'No hay número de orden' if !order['kpf_orden']
+      return order
     rescue
       render text: 'FRACASO'
     end
