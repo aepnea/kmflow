@@ -27,7 +27,7 @@ class KmflowController < ApplicationController
   #### Métodos de confirmación, se recomienda no cambiar
   ## flow_confirma : corresponde al estatus de la orden por parte de Webpay para validar
   ## verificar_respuesta : Confirma que antes que se ejecute cualquier página, existan los parámetros desde Flow
-  protected
+#  protected
   def flow_confirma
     logger.info "confirmando #################"
     logger.info params[:response]
@@ -50,10 +50,7 @@ class KmflowController < ApplicationController
     logger.info "resultado de verificar_respuesta #################"
     logger.info resp
     logger.info "comienza if de verificar_respuesta #################"
-    logger.info "read_confirm ejecutandose"
-    status = Kmflow::Pagos::read_confirm(params[:response])
-    logger.info status
-    
+
     if resp['response']
       @flow = resp['order']
     else

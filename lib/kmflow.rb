@@ -71,7 +71,9 @@ module Kmflow
     end
 
     def self.read_confirm(r)
+      log.info "en read_confirm ##################"
       order = Rack::Utils.parse_nested_query(r)
+      log.info order
       {'status' => order['status']}
       log.error 'invalid response status' if !order
       log.error 'Mensaje no tiene firma' if !order['s']
