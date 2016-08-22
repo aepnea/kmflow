@@ -36,7 +36,7 @@ class KmflowController < ApplicationController
     logger.info status
     logger.info "comienza if  de flow_confirma #################"
     if status['status'] == 'EXITO'
-      Kmflow::Pagos::build_response(true)
+      @firma = Kmflow::Pagos::build_response(true)
     else
       Kmflow::Pagos::build_response(false)
     end
