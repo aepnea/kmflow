@@ -66,7 +66,8 @@ module Kmflow
       log.info "firmando #########################"
       sign = flow_sign(q)
       log.info sign
-      q+'&s='+sign.html_content
+      #q+'&s='+sign.html_content
+      q+'&s='+sign
     end
 
     def self.flow_sign(data)
